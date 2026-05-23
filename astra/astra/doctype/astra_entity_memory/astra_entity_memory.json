@@ -1,0 +1,29 @@
+{
+  "actions": [],
+  "allow_rename": 1,
+  "autoname": "format:ASTRA-MEM-.#####",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": ["user", "company", "memory_key", "memory_value", "priority", "enabled"],
+  "fields": [
+    {"fieldname": "user", "fieldtype": "Link", "in_list_view": 1, "label": "User", "options": "User", "reqd": 1},
+    {"fieldname": "company", "fieldtype": "Link", "in_list_view": 1, "label": "Company", "options": "Company"},
+    {"fieldname": "memory_key", "fieldtype": "Data", "in_list_view": 1, "label": "Memory Key", "reqd": 1},
+    {"fieldname": "memory_value", "fieldtype": "Small Text", "label": "Memory Value", "reqd": 1},
+    {"default": "5", "fieldname": "priority", "fieldtype": "Int", "label": "Priority"},
+    {"default": "1", "fieldname": "enabled", "fieldtype": "Check", "in_list_view": 1, "label": "Enabled"}
+  ],
+  "is_submittable": 0,
+  "links": [],
+  "module": "Astra",
+  "name": "Astra Entity Memory",
+  "permissions": [
+    {"create": 1, "if_owner": 1, "read": 1, "role": "Astra User", "write": 1},
+    {"create": 1, "delete": 1, "read": 1, "role": "Astra Admin", "write": 1},
+    {"create": 1, "delete": 1, "read": 1, "role": "System Manager", "write": 1}
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

@@ -1,0 +1,143 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "creation": "2026-05-22 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "api_url",
+    "model_name",
+    "embedding_model",
+    "system_prompt",
+    "enable_rag",
+    "enable_vector_search",
+    "rag_result_limit",
+    "enable_fac_tools",
+    "max_fac_tool_calls",
+    "show_fac_tool_trace",
+    "enable_write_action_confirmation",
+    "fac_tool_allowlist"
+  ],
+  "fields": [
+    {
+      "default": "http://localhost:11434",
+      "fieldname": "api_url",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "API URL",
+      "reqd": 1
+    },
+    {
+      "default": "llama3",
+      "fieldname": "model_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Model Name",
+      "reqd": 1
+    },
+    {
+      "default": "nomic-embed-text",
+      "description": "Local Ollama embedding model used for vector RAG search.",
+      "fieldname": "embedding_model",
+      "fieldtype": "Data",
+      "label": "Embedding Model"
+    },
+    {
+      "fieldname": "system_prompt",
+      "fieldtype": "Small Text",
+      "label": "System Prompt"
+    },
+    {
+      "default": "1",
+      "fieldname": "enable_rag",
+      "fieldtype": "Check",
+      "label": "Enable RAG"
+    },
+    {
+      "default": "1",
+      "description": "Use locally stored embeddings for documentation retrieval when available.",
+      "fieldname": "enable_vector_search",
+      "fieldtype": "Check",
+      "label": "Enable Vector Search"
+    },
+    {
+      "default": "5",
+      "fieldname": "rag_result_limit",
+      "fieldtype": "Int",
+      "label": "RAG Result Limit"
+    },
+    {
+      "default": "0",
+      "fieldname": "enable_fac_tools",
+      "fieldtype": "Check",
+      "label": "Enable Frappe Assistant Core Tools"
+    },
+    {
+      "default": "4",
+      "description": "Maximum FAC tool calls Astra may make for one user message.",
+      "fieldname": "max_fac_tool_calls",
+      "fieldtype": "Int",
+      "label": "Max FAC Tool Calls"
+    },
+    {
+      "default": "1",
+      "description": "Return tool names and statuses to the Desk widget for transparency.",
+      "fieldname": "show_fac_tool_trace",
+      "fieldtype": "Check",
+      "label": "Show FAC Tool Trace"
+    },
+    {
+      "default": "0",
+      "description": "Allow write/action FAC tools to be requested as pending confirmations. They still require explicit user approval before execution.",
+      "fieldname": "enable_write_action_confirmation",
+      "fieldtype": "Check",
+      "label": "Enable Write Action Confirmation"
+    },
+    {
+      "default": "get_document\nlist_documents\nsearch_documents\nsearch_doctype\nsearch_link\nget_doctype_info\nmetadata_list_doctypes\nget_doctype_info_fields\nmetadata_permissions\nmetadata_workflow\nreport_list\nreport_requirements\ngenerate_report\nworkflow_list\nworkflow_status",
+      "description": "One FAC tool name per line. Keep write/action/code tools disabled unless Astra adds an explicit confirmation step.",
+      "fieldname": "fac_tool_allowlist",
+      "fieldtype": "Small Text",
+      "label": "FAC Tool Allowlist"
+    }
+  ],
+  "hide_toolbar": 0,
+  "idx": 0,
+  "in_create": 0,
+  "is_submittable": 0,
+  "issingle": 1,
+  "links": [],
+  "modified": "2026-05-22 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Astra",
+  "name": "Ollama Settings",
+  "owner": "Administrator",
+  "permissions": [
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "print": 1,
+      "read": 1,
+      "role": "Astra Admin",
+      "share": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "print": 1,
+      "read": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+    }
+  ],
+  "quick_entry": 0,
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "states": [],
+  "track_changes": 1
+}

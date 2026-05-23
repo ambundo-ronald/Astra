@@ -1,0 +1,100 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "format:ASTRA-CHAT-.#####",
+  "creation": "2026-05-23 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "title",
+    "user",
+    "status",
+    "message_count",
+    "last_message_at"
+  ],
+  "fields": [
+    {
+      "fieldname": "title",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Title",
+      "reqd": 1
+    },
+    {
+      "fieldname": "user",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "User",
+      "options": "User",
+      "reqd": 1
+    },
+    {
+      "default": "Open",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Open\nClosed"
+    },
+    {
+      "default": "0",
+      "fieldname": "message_count",
+      "fieldtype": "Int",
+      "in_list_view": 1,
+      "label": "Message Count",
+      "read_only": 1
+    },
+    {
+      "fieldname": "last_message_at",
+      "fieldtype": "Datetime",
+      "in_list_view": 1,
+      "label": "Last Message At",
+      "read_only": 1
+    }
+  ],
+  "idx": 0,
+  "is_submittable": 0,
+  "links": [],
+  "modified": "2026-05-23 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Astra",
+  "name": "Astra Chat Session",
+  "owner": "Administrator",
+  "permissions": [
+    {
+      "create": 1,
+      "if_owner": 1,
+      "read": 1,
+      "role": "Astra User",
+      "write": 1
+    },
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "role": "Astra Admin",
+      "share": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+    }
+  ],
+  "quick_entry": 0,
+  "sort_field": "last_message_at",
+  "sort_order": "DESC",
+  "states": [],
+  "track_changes": 1
+}

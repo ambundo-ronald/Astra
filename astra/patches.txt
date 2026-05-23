@@ -1,0 +1,2 @@
+astra.patches.v0_0_1.ensure_roles_settings_workspace
+astra.patches.v0_0_2.ensure_super_agent_defaults

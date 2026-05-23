@@ -1,0 +1,33 @@
+{
+  "actions": [],
+  "allow_rename": 1,
+  "autoname": "format:ASTRA-POLICY-.#####",
+  "creation": "2026-05-23 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": ["title", "enabled", "system_prompt", "policy_notes"],
+  "fields": [
+    {"fieldname": "title", "fieldtype": "Data", "in_list_view": 1, "label": "Title", "reqd": 1},
+    {"default": "0", "fieldname": "enabled", "fieldtype": "Check", "in_list_view": 1, "label": "Enabled"},
+    {"fieldname": "system_prompt", "fieldtype": "Long Text", "label": "System Prompt"},
+    {"fieldname": "policy_notes", "fieldtype": "Long Text", "label": "Policy Notes"}
+  ],
+  "idx": 0,
+  "is_submittable": 0,
+  "links": [],
+  "modified": "2026-05-23 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Astra",
+  "name": "Astra Policy Version",
+  "owner": "Administrator",
+  "permissions": [
+    {"create": 1, "delete": 1, "read": 1, "role": "Astra Admin", "write": 1},
+    {"create": 1, "delete": 1, "read": 1, "role": "System Manager", "write": 1}
+  ],
+  "quick_entry": 0,
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "states": [],
+  "track_changes": 1
+}

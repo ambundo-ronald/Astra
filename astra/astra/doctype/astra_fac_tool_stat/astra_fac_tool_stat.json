@@ -1,0 +1,29 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "field:tool_name",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": ["tool_name", "call_count", "error_count", "last_status", "last_latency_ms", "last_error", "last_schema_hash"],
+  "fields": [
+    {"fieldname": "tool_name", "fieldtype": "Data", "in_list_view": 1, "label": "Tool Name", "reqd": 1, "unique": 1},
+    {"default": "0", "fieldname": "call_count", "fieldtype": "Int", "in_list_view": 1, "label": "Call Count"},
+    {"default": "0", "fieldname": "error_count", "fieldtype": "Int", "in_list_view": 1, "label": "Error Count"},
+    {"fieldname": "last_status", "fieldtype": "Data", "in_list_view": 1, "label": "Last Status"},
+    {"fieldname": "last_latency_ms", "fieldtype": "Float", "label": "Last Latency ms"},
+    {"fieldname": "last_error", "fieldtype": "Small Text", "label": "Last Error"},
+    {"fieldname": "last_schema_hash", "fieldtype": "Data", "label": "Last Schema Hash"}
+  ],
+  "is_submittable": 0,
+  "links": [],
+  "module": "Astra",
+  "name": "Astra FAC Tool Stat",
+  "permissions": [
+    {"read": 1, "role": "Astra Admin"},
+    {"create": 1, "delete": 1, "read": 1, "role": "System Manager", "write": 1}
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

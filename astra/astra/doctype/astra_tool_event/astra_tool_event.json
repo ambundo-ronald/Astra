@@ -1,0 +1,47 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "format:ASTRA-EVENT-.#####",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "session",
+    "user",
+    "event_type",
+    "intent",
+    "tool_name",
+    "status",
+    "latency_ms",
+    "doctype_name",
+    "document_name",
+    "payload",
+    "error"
+  ],
+  "fields": [
+    {"fieldname": "session", "fieldtype": "Link", "label": "Session", "options": "Astra Chat Session", "in_list_view": 1},
+    {"fieldname": "user", "fieldtype": "Link", "label": "User", "options": "User", "in_list_view": 1},
+    {"fieldname": "event_type", "fieldtype": "Select", "label": "Event Type", "options": "Intent\nPlan\nValidation\nRepair\nConfirmation\nExecution\nResult\nFinal Answer\nError\nTip", "reqd": 1, "in_list_view": 1},
+    {"fieldname": "intent", "fieldtype": "Data", "label": "Intent"},
+    {"fieldname": "tool_name", "fieldtype": "Data", "label": "Tool Name", "in_list_view": 1},
+    {"default": "Success", "fieldname": "status", "fieldtype": "Select", "label": "Status", "options": "Success\nPending\nBlocked\nError", "in_list_view": 1},
+    {"fieldname": "latency_ms", "fieldtype": "Int", "label": "Latency ms"},
+    {"fieldname": "doctype_name", "fieldtype": "Link", "label": "DocType", "options": "DocType"},
+    {"fieldname": "document_name", "fieldtype": "Data", "label": "Document"},
+    {"fieldname": "payload", "fieldtype": "Code", "label": "Payload", "options": "JSON"},
+    {"fieldname": "error", "fieldtype": "Small Text", "label": "Error"}
+  ],
+  "index_web_pages_for_search": 0,
+  "is_submittable": 0,
+  "links": [],
+  "module": "Astra",
+  "name": "Astra Tool Event",
+  "permissions": [
+    {"read": 1, "if_owner": 1, "role": "Astra User"},
+    {"create": 1, "delete": 1, "read": 1, "role": "Astra Admin", "write": 1},
+    {"create": 1, "delete": 1, "read": 1, "role": "System Manager", "write": 1}
+  ],
+  "sort_field": "creation",
+  "sort_order": "DESC",
+  "track_changes": 0
+}

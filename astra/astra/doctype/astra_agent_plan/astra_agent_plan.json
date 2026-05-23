@@ -1,0 +1,31 @@
+{
+  "actions": [],
+  "allow_rename": 1,
+  "autoname": "format:ASTRA-PLAN-.#####",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": ["session", "user", "title", "status", "intent", "current_doctype", "current_document", "plan_json"],
+  "fields": [
+    {"fieldname": "session", "fieldtype": "Link", "in_list_view": 1, "label": "Session", "options": "Astra Chat Session"},
+    {"fieldname": "user", "fieldtype": "Link", "in_list_view": 1, "label": "User", "options": "User", "reqd": 1},
+    {"fieldname": "title", "fieldtype": "Data", "in_list_view": 1, "label": "Title", "reqd": 1},
+    {"default": "Draft", "fieldname": "status", "fieldtype": "Select", "in_list_view": 1, "label": "Status", "options": "Draft\nRunning\nWaiting for Approval\nCompleted\nFailed\nCancelled"},
+    {"fieldname": "intent", "fieldtype": "Data", "label": "Intent"},
+    {"fieldname": "current_doctype", "fieldtype": "Data", "label": "Current DocType"},
+    {"fieldname": "current_document", "fieldtype": "Data", "label": "Current Document"},
+    {"fieldname": "plan_json", "fieldtype": "Code", "label": "Plan JSON", "options": "JSON"}
+  ],
+  "is_submittable": 0,
+  "links": [],
+  "module": "Astra",
+  "name": "Astra Agent Plan",
+  "permissions": [
+    {"create": 1, "if_owner": 1, "read": 1, "role": "Astra User"},
+    {"create": 1, "delete": 1, "read": 1, "role": "Astra Admin", "write": 1},
+    {"create": 1, "delete": 1, "read": 1, "role": "System Manager", "write": 1}
+  ],
+  "sort_field": "creation",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

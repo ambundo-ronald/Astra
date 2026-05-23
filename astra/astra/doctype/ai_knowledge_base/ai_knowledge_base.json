@@ -1,0 +1,139 @@
+{
+  "actions": [],
+  "allow_rename": 1,
+  "autoname": "format:AI-KB-.#####",
+  "creation": "2026-05-22 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "title",
+    "category",
+    "source_url",
+    "source_group",
+    "doc_version",
+    "quality_score",
+    "stale",
+    "content_chunk",
+    "content_hash",
+    "embedding_model",
+    "embedding_vector"
+  ],
+  "fields": [
+    {
+      "fieldname": "title",
+      "fieldtype": "Data",
+      "in_global_search": 1,
+      "in_list_view": 1,
+      "label": "Title",
+      "reqd": 1
+    },
+    {
+      "fieldname": "category",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Category"
+    },
+    {
+      "fieldname": "source_url",
+      "fieldtype": "Data",
+      "label": "Source URL",
+      "options": "URL"
+    },
+    {
+      "fieldname": "source_group",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Source Group"
+    },
+    {
+      "fieldname": "doc_version",
+      "fieldtype": "Data",
+      "label": "Documentation Version"
+    },
+    {
+      "fieldname": "quality_score",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Quality Score",
+      "read_only": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "stale",
+      "fieldtype": "Check",
+      "in_list_view": 1,
+      "label": "Stale"
+    },
+    {
+      "fieldname": "content_chunk",
+      "fieldtype": "Long Text",
+      "in_global_search": 1,
+      "label": "Content Chunk",
+      "reqd": 1
+    },
+    {
+      "fieldname": "content_hash",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Content Hash",
+      "read_only": 1
+    },
+    {
+      "fieldname": "embedding_model",
+      "fieldtype": "Data",
+      "label": "Embedding Model",
+      "read_only": 1
+    },
+    {
+      "fieldname": "embedding_vector",
+      "fieldtype": "Code",
+      "label": "Embedding Vector",
+      "options": "JSON",
+      "read_only": 1
+    }
+  ],
+  "idx": 0,
+  "index_web_pages_for_search": 0,
+  "is_submittable": 0,
+  "links": [],
+  "modified": "2026-05-22 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Astra",
+  "name": "AI Knowledge Base",
+  "owner": "Administrator",
+  "permissions": [
+    {
+      "read": 1,
+      "role": "Astra User"
+    },
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "role": "Astra Admin",
+      "share": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+    }
+  ],
+  "quick_entry": 0,
+  "search_fields": "title,category,source_url",
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "states": [],
+  "track_changes": 1
+}

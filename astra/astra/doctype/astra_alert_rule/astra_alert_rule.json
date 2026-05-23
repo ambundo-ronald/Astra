@@ -1,0 +1,30 @@
+{
+  "actions": [],
+  "allow_rename": 1,
+  "autoname": "field:title",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": ["title", "enabled", "target_doctype", "filters_json", "threshold", "category", "severity", "message_template"],
+  "fields": [
+    {"fieldname": "title", "fieldtype": "Data", "in_list_view": 1, "label": "Title", "reqd": 1, "unique": 1},
+    {"default": "1", "fieldname": "enabled", "fieldtype": "Check", "in_list_view": 1, "label": "Enabled"},
+    {"fieldname": "target_doctype", "fieldtype": "Link", "in_list_view": 1, "label": "Target DocType", "options": "DocType", "reqd": 1},
+    {"fieldname": "filters_json", "fieldtype": "Code", "label": "Filters JSON", "options": "JSON"},
+    {"default": "1", "fieldname": "threshold", "fieldtype": "Int", "label": "Threshold"},
+    {"default": "Other", "fieldname": "category", "fieldtype": "Select", "label": "Category", "options": "Overdue Invoice\nLow Stock\nPending Approval\nBackground Job\nIntegration Error\nOther"},
+    {"default": "Medium", "fieldname": "severity", "fieldtype": "Select", "in_list_view": 1, "label": "Severity", "options": "Low\nMedium\nHigh"},
+    {"fieldname": "message_template", "fieldtype": "Small Text", "label": "Message Template"}
+  ],
+  "is_submittable": 0,
+  "links": [],
+  "module": "Astra",
+  "name": "Astra Alert Rule",
+  "permissions": [
+    {"create": 1, "delete": 1, "read": 1, "role": "Astra Admin", "write": 1},
+    {"create": 1, "delete": 1, "read": 1, "role": "System Manager", "write": 1}
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

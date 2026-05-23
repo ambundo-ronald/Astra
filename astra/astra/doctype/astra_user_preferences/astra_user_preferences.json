@@ -1,0 +1,39 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "field:user",
+  "creation": "2026-05-23 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": ["user", "model_profile", "preferred_model", "language", "answer_style", "show_tool_traces", "default_company", "default_warehouse", "default_currency"],
+  "fields": [
+    {"fieldname": "user", "fieldtype": "Link", "label": "User", "options": "User", "reqd": 1, "unique": 1},
+    {"fieldname": "model_profile", "fieldtype": "Link", "label": "Model Profile", "options": "Astra Model Profile"},
+    {"fieldname": "preferred_model", "fieldtype": "Data", "label": "Preferred Model"},
+    {"default": "English", "fieldname": "language", "fieldtype": "Data", "label": "Language"},
+    {"default": "Balanced", "fieldname": "answer_style", "fieldtype": "Select", "label": "Answer Style", "options": "Concise\nBalanced\nDetailed"},
+    {"default": "1", "fieldname": "show_tool_traces", "fieldtype": "Check", "label": "Show Tool Traces"},
+    {"fieldname": "default_company", "fieldtype": "Link", "label": "Default Company", "options": "Company"},
+    {"fieldname": "default_warehouse", "fieldtype": "Link", "label": "Default Warehouse", "options": "Warehouse"},
+    {"fieldname": "default_currency", "fieldtype": "Link", "label": "Default Currency", "options": "Currency"}
+  ],
+  "idx": 0,
+  "is_submittable": 0,
+  "links": [],
+  "modified": "2026-05-23 00:00:00.000000",
+  "modified_by": "Administrator",
+  "module": "Astra",
+  "name": "Astra User Preferences",
+  "owner": "Administrator",
+  "permissions": [
+    {"create": 1, "if_owner": 1, "read": 1, "role": "Astra User", "write": 1},
+    {"create": 1, "delete": 1, "read": 1, "role": "Astra Admin", "write": 1},
+    {"create": 1, "delete": 1, "read": 1, "role": "System Manager", "write": 1}
+  ],
+  "quick_entry": 0,
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "states": [],
+  "track_changes": 1
+}

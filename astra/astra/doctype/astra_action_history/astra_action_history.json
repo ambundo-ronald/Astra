@@ -1,0 +1,132 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "autoname": "format:ASTRA-ACTION-.#####",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "session",
+    "confirmation",
+    "user",
+    "tool_name",
+    "status",
+    "doctype_name",
+    "document_name",
+    "preview",
+    "result",
+    "undo_guidance",
+    "executed_at"
+  ],
+  "fields": [
+    {
+      "fieldname": "session",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Session",
+      "options": "Astra Chat Session"
+    },
+    {
+      "fieldname": "confirmation",
+      "fieldtype": "Link",
+      "label": "Confirmation",
+      "options": "Astra Tool Confirmation"
+    },
+    {
+      "fieldname": "user",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "User",
+      "options": "User",
+      "reqd": 1
+    },
+    {
+      "fieldname": "tool_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Tool Name",
+      "reqd": 1
+    },
+    {
+      "default": "Executed",
+      "fieldname": "status",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Status",
+      "options": "Executed\nFailed"
+    },
+    {
+      "fieldname": "doctype_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "DocType"
+    },
+    {
+      "fieldname": "document_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Document"
+    },
+    {
+      "fieldname": "preview",
+      "fieldtype": "Code",
+      "label": "Preview",
+      "options": "JSON"
+    },
+    {
+      "fieldname": "result",
+      "fieldtype": "Code",
+      "label": "Result",
+      "options": "JSON"
+    },
+    {
+      "fieldname": "undo_guidance",
+      "fieldtype": "Long Text",
+      "label": "Undo Guidance"
+    },
+    {
+      "fieldname": "executed_at",
+      "fieldtype": "Datetime",
+      "in_list_view": 1,
+      "label": "Executed At",
+      "read_only": 1
+    }
+  ],
+  "is_submittable": 0,
+  "links": [],
+  "module": "Astra",
+  "name": "Astra Action History",
+  "permissions": [
+    {
+      "create": 1,
+      "if_owner": 1,
+      "read": 1,
+      "role": "Astra User"
+    },
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "role": "Astra Admin",
+      "share": 1,
+      "write": 1
+    },
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "export": 1,
+      "print": 1,
+      "read": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "creation",
+  "sort_order": "DESC",
+  "track_changes": 1
+}
