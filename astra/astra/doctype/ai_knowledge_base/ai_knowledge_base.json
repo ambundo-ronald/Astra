@@ -1,7 +1,7 @@
 {
   "actions": [],
   "allow_rename": 1,
-  "autoname": "format:AI-KB-.#####",
+  "autoname": "format:AI-KB-{#####}",
   "creation": "2026-05-22 00:00:00.000000",
   "doctype": "DocType",
   "editable_grid": 1,

@@ -1,7 +1,7 @@
 {
   "actions": [],
   "allow_rename": 0,
-  "autoname": "format:ASTRA-CONF-.#####",
+  "autoname": "format:ASTRA-CONF-{#####}",
   "creation": "2026-05-23 00:00:00.000000",
   "doctype": "DocType",
   "editable_grid": 1,

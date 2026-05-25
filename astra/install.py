@@ -238,7 +238,10 @@ def create_prompt_injection_tests():
     for case in cases:
         if frappe.db.exists("Astra Evaluation Case", {"title": case["title"]}):
             continue
-        frappe.get_doc({"doctype": "Astra Evaluation Case", "enabled": 1, **case}).insert(ignore_permissions=True)
+        frappe.get_doc({"doctype": "Astra Evaluation Case", "enabled": 1, **case}).insert(
+            ignore_permissions=True,
+            ignore_if_duplicate=True,
+        )
 
 
 def seed_workflow_packs():
