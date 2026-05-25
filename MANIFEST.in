@@ -1,0 +1,8 @@
+include README.md
+include license.txt
+include astra/modules.txt
+include astra/patches.txt
+recursive-include astra *.json
+recursive-include astra *.py
+recursive-include astra/public *.css
+recursive-include astra/public *.js

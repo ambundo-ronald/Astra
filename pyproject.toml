@@ -20,6 +20,9 @@ classifiers = [
 [tool.setuptools.dynamic]
 version = { attr = "astra.__version__" }
 
+[tool.setuptools]
+include-package-data = true
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["astra*"]
