@@ -24,7 +24,13 @@
     root.className = "local-ai-assistant";
     root.innerHTML = `
       <button class="local-ai-toggle" type="button" aria-label="Open AI assistant">
-        <span class="local-ai-toggle-icon">AI</span>
+        <span class="local-ai-toggle-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" focusable="false">
+            <path class="local-ai-mark-orbit" d="M8 26c6.5-12.5 25.5-12.5 32 0" />
+            <path class="local-ai-mark-a" d="M15 36 24 12l9 24m-14.5-9h11" />
+            <path class="local-ai-mark-star" d="M36 9l1.6 4.4L42 15l-4.4 1.6L36 21l-1.6-4.4L30 15l4.4-1.6L36 9Z" />
+          </svg>
+        </span>
       </button>
       <section class="local-ai-panel" aria-label="Astra">
         <header class="local-ai-header">

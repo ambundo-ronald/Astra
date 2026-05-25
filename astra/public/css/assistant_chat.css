@@ -16,22 +16,57 @@
 
 .local-ai-toggle {
   align-items: center;
-  background: var(--local-ai-accent);
+  background: transparent;
   border: 0;
-  border-radius: 8px;
-  box-shadow: 0 12px 34px rgba(15, 118, 110, 0.26);
-  color: #ffffff;
+  border-radius: 999px;
+  box-shadow: none;
+  color: var(--local-ai-accent);
   cursor: pointer;
   display: flex;
-  font-weight: 700;
   height: 48px;
   justify-content: center;
   letter-spacing: 0;
-  width: 56px;
+  padding: 0;
+  width: 48px;
 }
 
 .local-ai-toggle:hover {
-  background: var(--local-ai-accent-strong);
+  background: rgba(15, 118, 110, 0.08);
+  color: var(--local-ai-accent-strong);
+}
+
+.local-ai-toggle-icon {
+  display: block;
+  height: 42px;
+  width: 42px;
+}
+
+.local-ai-toggle-icon svg {
+  display: block;
+  height: 100%;
+  overflow: visible;
+  width: 100%;
+}
+
+.local-ai-mark-a,
+.local-ai-mark-orbit {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.local-ai-mark-a {
+  stroke-width: 4;
+}
+
+.local-ai-mark-orbit {
+  opacity: 0.42;
+  stroke-width: 3;
+}
+
+.local-ai-mark-star {
+  fill: currentColor;
 }
 
 .local-ai-panel {
