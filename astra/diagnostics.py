@@ -1,7 +1,7 @@
 import frappe
 
 from astra import fac_bridge, rag
-from astra.api import DEFAULT_API_URL, DEFAULT_MODEL, _get_from_ollama, _get_settings
+from astra.api import DEFAULT_API_URL, DEFAULT_MODEL, _get_from_ollama, _get_settings, _prepare_ollama_connection
 
 
 def run_smoke_test():
@@ -80,7 +80,7 @@ def _check_settings():
 
 def _check_ollama():
     settings = _get_settings()
-    api_url = (settings.get("api_url") or DEFAULT_API_URL).rstrip("/")
+    api_url = _prepare_ollama_connection(settings)
     model_name = settings.get("model_name") or DEFAULT_MODEL
     embedding_model = settings.get("embedding_model") or "nomic-embed-text"
 

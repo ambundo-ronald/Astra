@@ -83,7 +83,7 @@ def get_chat_response(user_message, history=None, session_id=None, current_conte
     current_context = _normalize_current_context(current_context)
 
     settings = _get_settings()
-    api_url = _validate_local_api_url(settings.get("api_url") or DEFAULT_API_URL)
+    api_url = _prepare_ollama_connection(settings)
     preferences = _get_user_preferences()
     model_name = _resolve_model_from_preferences(
         preferences,
@@ -163,7 +163,7 @@ def get_assistant_status():
     }
 
     try:
-        api_url = _validate_local_api_url(settings.get("api_url") or DEFAULT_API_URL)
+        api_url = _prepare_ollama_connection(settings)
         response = _get_from_ollama(f"{api_url}/api/tags")
         model_rows = response.get("models", [])
         models = [item.get("name", "") for item in model_rows]
@@ -172,6 +172,7 @@ def get_assistant_status():
         model_health = _assess_model_health(model_name, model_rows, model_found)
         status["ollama"] = {
             "ok": True,
+            "provider": settings.get("provider") or "Local Ollama",
             "model_found": model_found,
             "model_health": model_health,
             "message": "Ollama is reachable."
@@ -249,7 +250,7 @@ def run_streaming_chat_response(user, request_id, user_message, history, session
 
     try:
         settings = _get_settings()
-        api_url = _validate_local_api_url(settings.get("api_url") or DEFAULT_API_URL)
+        api_url = _prepare_ollama_connection(settings)
         preferences = _get_user_preferences()
         model_name = _resolve_model_from_preferences(
             preferences,
@@ -927,7 +928,7 @@ def run_evaluation_cases(limit=20, run_model=0):
     )
     results = []
     settings = _get_settings()
-    api_url = _validate_local_api_url(settings.get("api_url") or DEFAULT_API_URL) if cint(run_model) else ""
+    api_url = _prepare_ollama_connection(settings) if cint(run_model) else ""
     model_name = settings.get("model_name") or DEFAULT_MODEL
     for row in rows:
         classification = intent.classify(row.prompt)
@@ -1680,7 +1681,10 @@ def _get_settings():
     try:
         settings = frappe.get_single("Ollama Settings")
         return {
+            "provider": getattr(settings, "provider", None) or "Local Ollama",
             "api_url": settings.api_url,
+            "api_key": settings.get_password("api_key") if hasattr(settings, "get_password") else "",
+            "allow_remote_business_context": cint(getattr(settings, "allow_remote_business_context", 0)),
             "model_name": settings.model_name,
             "embedding_model": getattr(settings, "embedding_model", None) or "nomic-embed-text",
             "system_prompt": settings.system_prompt,
@@ -1697,7 +1701,10 @@ def _get_settings():
         }
     except Exception:
         return {
+            "provider": "Local Ollama",
             "api_url": DEFAULT_API_URL,
+            "api_key": "",
+            "allow_remote_business_context": 0,
             "model_name": DEFAULT_MODEL,
             "embedding_model": "nomic-embed-text",
             "system_prompt": "",
@@ -1712,15 +1719,40 @@ def _get_settings():
         }
 
 
-def _validate_local_api_url(api_url):
-    parsed = urlparse(api_url.rstrip("/"))
+def _prepare_ollama_connection(settings):
+    api_url = (settings.get("api_url") or DEFAULT_API_URL).rstrip("/")
+    provider = settings.get("provider") or "Local Ollama"
+    parsed = urlparse(api_url)
     host = (parsed.hostname or "").lower()
-    allowed_hosts = {"localhost", "127.0.0.1", "::1"}
 
-    if parsed.scheme not in {"http", "https"} or host not in allowed_hosts:
+    if provider == "Local Ollama" and (parsed.scheme not in {"http", "https"} or host not in {"localhost", "127.0.0.1", "::1"}):
         frappe.throw(_("Ollama API URL must point to localhost or 127.0.0.1."))
+    if provider == "Remote Ollama":
+        if parsed.scheme != "https" or not host:
+            frappe.throw(_("Remote Ollama API URL must be a valid HTTPS endpoint."))
+        if not cint(settings.get("allow_remote_business_context")):
+            frappe.throw(
+                _(
+                    "Remote Ollama is configured, but remote business context is not allowed. "
+                    "Enable it in Ollama Settings only for a private, trusted endpoint."
+                )
+            )
+    if provider not in {"Local Ollama", "Remote Ollama"}:
+        frappe.throw(_("Unsupported Ollama provider."))
 
-    return api_url.rstrip("/")
+    frappe.flags.astra_ollama_headers = _build_ollama_headers(settings)
+    return api_url
+
+
+def _build_ollama_headers(settings):
+    token = settings.get("api_key") or ""
+    if not token:
+        return {}
+    return {"Authorization": f"Bearer {token}"}
+
+
+def _get_ollama_headers():
+    return getattr(frappe.flags, "astra_ollama_headers", {}) or {}
 
 
 def _build_system_prompt(
@@ -2507,25 +2539,27 @@ def _extract_keywords(message):
 
 
 def _post_to_ollama(url, payload):
+    headers = _get_ollama_headers()
     try:
         import requests
 
-        response = requests.post(url, json=payload, timeout=(5, 120))
+        response = requests.post(url, json=payload, headers=headers, timeout=(5, 120))
         response.raise_for_status()
         return response.json()
     except ImportError:
-        return frappe.make_post_request(url, json=payload)
+        return frappe.make_post_request(url, json=payload, headers=headers or None)
 
 
 def _get_from_ollama(url):
+    headers = _get_ollama_headers()
     try:
         import requests
 
-        response = requests.get(url, timeout=(3, 20))
+        response = requests.get(url, headers=headers, timeout=(3, 20))
         response.raise_for_status()
         return response.json()
     except ImportError:
-        return frappe.make_get_request(url)
+        return frappe.make_get_request(url, headers=headers or None)
 
 
 def _send_ollama_chat(api_url, model_name, messages):
@@ -2566,7 +2600,13 @@ def _stream_ollama_chat(api_url, model_name, messages, event, user, publish_toke
         "stream": True,
     }
     answer_parts = []
-    response = requests.post(f"{api_url}/api/chat", json=payload, timeout=(5, 180), stream=True)
+    response = requests.post(
+        f"{api_url}/api/chat",
+        json=payload,
+        headers=_get_ollama_headers(),
+        timeout=(5, 180),
+        stream=True,
+    )
     response.raise_for_status()
 
     for line in response.iter_lines():

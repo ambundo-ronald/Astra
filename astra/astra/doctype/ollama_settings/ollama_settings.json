@@ -6,7 +6,10 @@
   "editable_grid": 1,
   "engine": "InnoDB",
   "field_order": [
+    "provider",
     "api_url",
+    "api_key",
+    "allow_remote_business_context",
     "model_name",
     "embedding_model",
     "system_prompt",
@@ -21,12 +24,35 @@
   ],
   "fields": [
     {
+      "default": "Local Ollama",
+      "description": "Use Local Ollama for same-server/private installs. Use Remote Ollama for a secured HTTPS Ollama endpoint reachable from Frappe Cloud.",
+      "fieldname": "provider",
+      "fieldtype": "Select",
+      "in_list_view": 1,
+      "label": "Provider",
+      "options": "Local Ollama\nRemote Ollama"
+    },
+    {
       "default": "http://localhost:11434",
+      "description": "For Local Ollama use http://localhost:11434. For Frappe Cloud use a secured HTTPS URL to your remote Ollama proxy/server.",
       "fieldname": "api_url",
       "fieldtype": "Data",
       "in_list_view": 1,
       "label": "API URL",
       "reqd": 1
+    },
+    {
+      "description": "Optional bearer token sent as Authorization header to a remote Ollama reverse proxy.",
+      "fieldname": "api_key",
+      "fieldtype": "Password",
+      "label": "API Key"
+    },
+    {
+      "default": "0",
+      "description": "Remote providers receive prompt context over the network. Enable only when your remote Ollama endpoint is private and trusted.",
+      "fieldname": "allow_remote_business_context",
+      "fieldtype": "Check",
+      "label": "Allow Remote Business Context"
     },
     {
       "default": "llama3",

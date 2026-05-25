@@ -234,7 +234,7 @@ def chunk_text(text, chunk_size=DEFAULT_CHUNK_SIZE, overlap=DEFAULT_CHUNK_OVERLA
 
 def get_embedding(text, settings=None):
     settings = settings or get_rag_settings()
-    api_url = _validate_local_api_url(settings.get("api_url"))
+    api_url = _prepare_ollama_connection(settings)
     model = settings.get("embedding_model") or "nomic-embed-text"
     payload = {"model": model, "input": text}
 
@@ -260,14 +260,20 @@ def get_rag_settings():
     try:
         settings = frappe.get_single("Ollama Settings")
         return {
+            "provider": getattr(settings, "provider", None) or "Local Ollama",
             "api_url": (settings.api_url or "http://localhost:11434").rstrip("/"),
+            "api_key": settings.get_password("api_key") if hasattr(settings, "get_password") else "",
+            "allow_remote_business_context": cint(getattr(settings, "allow_remote_business_context", 0)),
             "embedding_model": getattr(settings, "embedding_model", None) or "nomic-embed-text",
             "enable_vector_search": cint(getattr(settings, "enable_vector_search", 1)),
             "rag_result_limit": cint(getattr(settings, "rag_result_limit", 0)) or DEFAULT_RAG_LIMIT,
         }
     except Exception:
         return {
+            "provider": "Local Ollama",
             "api_url": "http://localhost:11434",
+            "api_key": "",
+            "allow_remote_business_context": 0,
             "embedding_model": "nomic-embed-text",
             "enable_vector_search": 1,
             "rag_result_limit": DEFAULT_RAG_LIMIT,
@@ -386,14 +392,15 @@ def _fetch_url_text(url):
 
 
 def _post_to_ollama(url, payload):
+    headers = getattr(frappe.flags, "astra_ollama_headers", {}) or {}
     try:
         import requests
 
-        response = requests.post(url, json=payload, timeout=(5, 120))
+        response = requests.post(url, json=payload, headers=headers, timeout=(5, 120))
         response.raise_for_status()
         return response.json()
     except ImportError:
-        return frappe.make_post_request(url, json=payload)
+        return frappe.make_post_request(url, json=payload, headers=headers or None)
 
 
 def _validate_source_url(url):
@@ -404,12 +411,22 @@ def _validate_source_url(url):
     return parsed.geturl()
 
 
-def _validate_local_api_url(api_url):
-    parsed = urlparse((api_url or "http://localhost:11434").rstrip("/"))
+def _prepare_ollama_connection(settings):
+    api_url = (settings.get("api_url") or "http://localhost:11434").rstrip("/")
+    provider = settings.get("provider") or "Local Ollama"
+    parsed = urlparse(api_url)
     host = (parsed.hostname or "").lower()
-    if parsed.scheme not in {"http", "https"} or host not in {"localhost", "127.0.0.1", "::1"}:
+    if provider == "Local Ollama" and (parsed.scheme not in {"http", "https"} or host not in {"localhost", "127.0.0.1", "::1"}):
         frappe.throw(_("Ollama API URL must point to localhost or 127.0.0.1."))
-    return parsed.geturl().rstrip("/")
+    if provider == "Remote Ollama":
+        if parsed.scheme != "https" or not host:
+            frappe.throw(_("Remote Ollama API URL must be a valid HTTPS endpoint."))
+        if not cint(settings.get("allow_remote_business_context")):
+            frappe.throw(_("Remote Ollama RAG embeddings require Allow Remote Business Context in Ollama Settings."))
+    frappe.flags.astra_ollama_headers = (
+        {"Authorization": f"Bearer {settings.get('api_key')}"} if settings.get("api_key") else {}
+    )
+    return api_url
 
 
 def _require_system_manager():

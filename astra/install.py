@@ -30,6 +30,7 @@ def create_default_settings():
     changed = False
 
     defaults = {
+        "provider": "Local Ollama",
         "api_url": "http://localhost:11434",
         "model_name": "llama3",
         "embedding_model": "nomic-embed-text",

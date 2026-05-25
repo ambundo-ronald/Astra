@@ -13,7 +13,7 @@ bench build --app astra
 bench restart
 ```
 
-Configure `Ollama Settings` in Desk and make sure Ollama is running locally.
+Configure `Ollama Settings` in Desk. For self-hosted benches, Astra can call local Ollama. For Frappe Cloud, use `Remote Ollama` with a secured HTTPS endpoint to your Ollama server or reverse proxy.
 
 Astra creates default `Astra User` and `Astra Admin` roles during installation, seeds `Ollama Settings`, and attempts to add an Astra Workspace with shortcuts to settings, knowledge base, and chat sessions.
 
@@ -25,7 +25,27 @@ Astra is structured as a standard Frappe custom app and avoids core file changes
 
 After installing or updating Astra on v16, run `bench --site your-site migrate`, `bench build --app astra`, and restart the bench so DocTypes, patches, scheduler jobs, and Desk assets are all active. Assign `Astra User` to normal chat users and `Astra Admin` to users who can manage knowledge, confirmations, evaluations, and observability.
 
-For realtime streaming and background alerts, keep the standard Frappe services running: web, workers, scheduler, Redis, and Socket.IO. Astra's chat works without public internet access, but Ollama must be reachable from the Frappe server at the local URL configured in `Ollama Settings`.
+For realtime streaming and background alerts, keep the standard Frappe services running: web, workers, scheduler, Redis, and Socket.IO. Ollama must be reachable from the Frappe server at the URL configured in `Ollama Settings`.
+
+## Ollama Provider Setup
+
+For a private server where Ollama runs beside Frappe:
+
+```text
+Provider: Local Ollama
+API URL: http://localhost:11434
+```
+
+For Frappe Cloud:
+
+```text
+Provider: Remote Ollama
+API URL: https://your-secure-ollama-domain.example.com
+API Key: optional bearer token required by your reverse proxy
+Allow Remote Business Context: enabled only for a private, trusted endpoint
+```
+
+Do not expose raw `http://server-ip:11434` to the public internet. Put Docker Ollama behind HTTPS and access control, such as Caddy/Nginx with bearer auth, Cloudflare Tunnel with access policy, or a private VPN/tunnel that Frappe Cloud can reach.
 
 ## Optional Frappe Assistant Core Tools
 

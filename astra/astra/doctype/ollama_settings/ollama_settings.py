@@ -1,9 +1,13 @@
 import frappe
+from frappe import _
 from frappe.model.document import Document
+from urllib.parse import urlparse
 
 
 class OllamaSettings(Document):
     def validate(self):
+        if not self.provider:
+            self.provider = "Local Ollama"
         if not self.api_url:
             self.api_url = "http://localhost:11434"
         if not self.model_name:
@@ -12,6 +16,16 @@ class OllamaSettings(Document):
             self.embedding_model = "nomic-embed-text"
 
         self.api_url = self.api_url.rstrip("/")
+        parsed = urlparse(self.api_url)
+        host = (parsed.hostname or "").lower()
+        if self.provider == "Local Ollama":
+            if parsed.scheme not in {"http", "https"} or host not in {"localhost", "127.0.0.1", "::1"}:
+                frappe.throw(_("Local Ollama provider must use localhost, 127.0.0.1, or ::1."))
+        elif self.provider == "Remote Ollama":
+            if parsed.scheme != "https":
+                frappe.throw(_("Remote Ollama provider must use HTTPS. Put Ollama behind a secure reverse proxy or tunnel."))
+        else:
+            frappe.throw(_("Unsupported Ollama provider."))
 
         if not self.system_prompt:
             self.system_prompt = (
