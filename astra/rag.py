@@ -262,7 +262,12 @@ def get_rag_settings():
         return {
             "provider": getattr(settings, "provider", None) or "Local Ollama",
             "api_url": (settings.api_url or "http://localhost:11434").rstrip("/"),
+            "auth_type": getattr(settings, "auth_type", None) or "",
             "api_key": settings.get_password("api_key") if hasattr(settings, "get_password") else "",
+            "cf_access_client_id": getattr(settings, "cf_access_client_id", None) or "",
+            "cf_access_client_secret": (
+                settings.get_password("cf_access_client_secret") if hasattr(settings, "get_password") else ""
+            ),
             "allow_remote_business_context": cint(getattr(settings, "allow_remote_business_context", 0)),
             "embedding_model": getattr(settings, "embedding_model", None) or "nomic-embed-text",
             "enable_vector_search": cint(getattr(settings, "enable_vector_search", 1)),
@@ -272,7 +277,10 @@ def get_rag_settings():
         return {
             "provider": "Local Ollama",
             "api_url": "http://localhost:11434",
+            "auth_type": "None",
             "api_key": "",
+            "cf_access_client_id": "",
+            "cf_access_client_secret": "",
             "allow_remote_business_context": 0,
             "embedding_model": "nomic-embed-text",
             "enable_vector_search": 1,
@@ -423,10 +431,28 @@ def _prepare_ollama_connection(settings):
             frappe.throw(_("Remote Ollama API URL must be a valid HTTPS endpoint."))
         if not cint(settings.get("allow_remote_business_context")):
             frappe.throw(_("Remote Ollama RAG embeddings require Allow Remote Business Context in Ollama Settings."))
-    frappe.flags.astra_ollama_headers = (
-        {"Authorization": f"Bearer {settings.get('api_key')}"} if settings.get("api_key") else {}
-    )
+    frappe.flags.astra_ollama_headers = _build_ollama_headers(settings)
     return api_url
+
+
+def _build_ollama_headers(settings):
+    auth_type = settings.get("auth_type") or ("Bearer Token" if settings.get("api_key") else "None")
+    if auth_type == "Cloudflare Access Service Token":
+        client_id = settings.get("cf_access_client_id") or ""
+        client_secret = settings.get("cf_access_client_secret") or ""
+        if not client_id or not client_secret:
+            frappe.throw(_("Cloudflare Access service token authentication requires a client ID and client secret."))
+        return {
+            "CF-Access-Client-Id": client_id,
+            "CF-Access-Client-Secret": client_secret,
+        }
+    if auth_type == "None":
+        return {}
+
+    token = settings.get("api_key") or ""
+    if not token:
+        return {}
+    return {"Authorization": f"Bearer {token}"}
 
 
 def _require_system_manager():

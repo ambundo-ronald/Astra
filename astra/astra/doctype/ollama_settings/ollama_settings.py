@@ -14,6 +14,8 @@ class OllamaSettings(Document):
             self.model_name = "llama3"
         if not self.embedding_model:
             self.embedding_model = "nomic-embed-text"
+        if not getattr(self, "auth_type", None):
+            self.auth_type = "Bearer Token" if getattr(self, "api_key", None) else "None"
 
         self.api_url = self.api_url.rstrip("/")
         parsed = urlparse(self.api_url)
@@ -24,6 +26,11 @@ class OllamaSettings(Document):
         elif self.provider == "Remote Ollama":
             if parsed.scheme != "https":
                 frappe.throw(_("Remote Ollama provider must use HTTPS. Put Ollama behind a secure reverse proxy or tunnel."))
+            if self.auth_type == "Cloudflare Access Service Token" and (
+                not getattr(self, "cf_access_client_id", None)
+                or not getattr(self, "cf_access_client_secret", None)
+            ):
+                frappe.throw(_("Cloudflare Access service token authentication requires a client ID and client secret."))
         else:
             frappe.throw(_("Unsupported Ollama provider."))
 
