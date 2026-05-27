@@ -41,12 +41,19 @@ For Frappe Cloud:
 ```text
 Provider: Remote Ollama
 API URL: https://your-secure-ollama-domain.example.com
-Remote Auth Type: Bearer Token
-API Key: optional bearer token required by your reverse proxy
+Remote Auth Type: None
+API Key: blank unless your reverse proxy requires a bearer token
 Allow Remote Business Context: enabled only for a private, trusted endpoint
 ```
 
-For a Cloudflare Access-protected tunnel, create a Cloudflare Access service token and use:
+If your reverse proxy requires bearer authentication, use:
+
+```text
+Remote Auth Type: Bearer Token
+API Key: your bearer token
+```
+
+If you specifically protected the tunnel with Cloudflare Access, create a Cloudflare Access service token and use:
 
 ```text
 Remote Auth Type: Cloudflare Access Service Token
@@ -54,7 +61,9 @@ Cloudflare Access Client ID: your service token client ID
 Cloudflare Access Client Secret: your service token client secret
 ```
 
-Do not expose raw `http://server-ip:11434` to the public internet. Put Docker Ollama behind HTTPS and access control, such as Caddy/Nginx with bearer auth, Cloudflare Tunnel with access policy, or a private VPN/tunnel that Frappe Cloud can reach.
+Cloudflare Access is optional. For a regular Cloudflare Tunnel without Access, keep `Remote Auth Type` as `None` or `Bearer Token` depending on your own proxy, and make sure Cloudflare Bot/WAF rules allow server-to-server POST requests to Ollama paths such as `/api/chat`, `/api/generate`, `/api/embed`, `/api/embeddings`, and `/api/tags`.
+
+Do not expose raw `http://server-ip:11434` to the public internet. Put Docker Ollama behind HTTPS and access control, such as Caddy/Nginx with bearer auth, Cloudflare Tunnel with suitable WAF rules, Cloudflare Access service-token auth, or a private VPN/tunnel that Frappe Cloud can reach.
 
 ## Optional Frappe Assistant Core Tools
 

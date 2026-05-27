@@ -45,15 +45,15 @@
       "reqd": 1
     },
     {
-      "description": "Optional bearer token sent as Authorization header to a remote Ollama reverse proxy.",
+      "description": "Optional bearer token sent as Authorization header to a remote Ollama reverse proxy. Use only when your proxy expects bearer auth.",
       "fieldname": "api_key",
       "depends_on": "eval:doc.auth_type=='Bearer Token'",
       "fieldtype": "Password",
       "label": "API Key"
     },
     {
-      "default": "Bearer Token",
-      "description": "Authentication headers sent to the remote Ollama endpoint.",
+      "default": "None",
+      "description": "Optional authentication headers sent to the remote Ollama endpoint. Cloudflare Access service tokens are only needed if you enabled Cloudflare Access for this tunnel.",
       "fieldname": "auth_type",
       "fieldtype": "Select",
       "label": "Remote Auth Type",
@@ -61,14 +61,14 @@
     },
     {
       "depends_on": "eval:doc.auth_type=='Cloudflare Access Service Token'",
-      "description": "Cloudflare Access service token client ID.",
+      "description": "Optional Cloudflare Access service token client ID. Leave blank unless your tunnel is protected by Cloudflare Access.",
       "fieldname": "cf_access_client_id",
       "fieldtype": "Data",
       "label": "Cloudflare Access Client ID"
     },
     {
       "depends_on": "eval:doc.auth_type=='Cloudflare Access Service Token'",
-      "description": "Cloudflare Access service token client secret.",
+      "description": "Optional Cloudflare Access service token client secret. Leave blank unless your tunnel is protected by Cloudflare Access.",
       "fieldname": "cf_access_client_secret",
       "fieldtype": "Password",
       "label": "Cloudflare Access Client Secret"
