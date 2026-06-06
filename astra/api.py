@@ -1677,6 +1677,20 @@ def _json_loads(value, fallback):
         return fallback
 
 
+def _safe_get_password(doc, fieldname):
+    if not hasattr(doc, "get_password") or not getattr(doc, fieldname, None):
+        return ""
+    try:
+        return doc.get_password(fieldname, raise_exception=False) or ""
+    except TypeError:
+        try:
+            return doc.get_password(fieldname) or ""
+        except Exception:
+            return ""
+    except Exception:
+        return ""
+
+
 def _get_settings():
     try:
         settings = frappe.get_single("Ollama Settings")
@@ -1684,11 +1698,9 @@ def _get_settings():
             "provider": getattr(settings, "provider", None) or "Local Ollama",
             "api_url": settings.api_url,
             "auth_type": getattr(settings, "auth_type", None) or "",
-            "api_key": settings.get_password("api_key") if hasattr(settings, "get_password") else "",
+            "api_key": _safe_get_password(settings, "api_key"),
             "cf_access_client_id": getattr(settings, "cf_access_client_id", None) or "",
-            "cf_access_client_secret": (
-                settings.get_password("cf_access_client_secret") if hasattr(settings, "get_password") else ""
-            ),
+            "cf_access_client_secret": _safe_get_password(settings, "cf_access_client_secret"),
             "allow_remote_business_context": cint(getattr(settings, "allow_remote_business_context", 0)),
             "model_name": settings.model_name,
             "embedding_model": getattr(settings, "embedding_model", None) or "nomic-embed-text",
@@ -1865,7 +1877,23 @@ def _get_document_context(current_context):
     return safety.sanitize_context_text("\n".join(lines))
 
 
+def _has_active_workflow(doctype):
+    if not doctype:
+        return False
+    try:
+        return bool(
+            frappe.db.exists(
+                "Workflow",
+                {"document_type": doctype, "is_active": 1},
+            )
+        )
+    except Exception:
+        return False
+
+
 def _get_workflow_context(doctype, doc):
+    if not _has_active_workflow(doctype):
+        return ""
     try:
         from frappe.model.workflow import get_transitions
 
@@ -1881,6 +1909,8 @@ def _get_workflow_context(doctype, doc):
 
 
 def _get_workflow_tip(doctype, doc):
+    if not _has_active_workflow(doctype):
+        return None
     try:
         from frappe.model.workflow import get_transitions
 

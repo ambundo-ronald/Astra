@@ -256,6 +256,20 @@ def get_embedding(text, settings=None):
     return embedding
 
 
+def _safe_get_password(doc, fieldname):
+    if not hasattr(doc, "get_password") or not getattr(doc, fieldname, None):
+        return ""
+    try:
+        return doc.get_password(fieldname, raise_exception=False) or ""
+    except TypeError:
+        try:
+            return doc.get_password(fieldname) or ""
+        except Exception:
+            return ""
+    except Exception:
+        return ""
+
+
 def get_rag_settings():
     try:
         settings = frappe.get_single("Ollama Settings")
@@ -263,11 +277,9 @@ def get_rag_settings():
             "provider": getattr(settings, "provider", None) or "Local Ollama",
             "api_url": (settings.api_url or "http://localhost:11434").rstrip("/"),
             "auth_type": getattr(settings, "auth_type", None) or "",
-            "api_key": settings.get_password("api_key") if hasattr(settings, "get_password") else "",
+            "api_key": _safe_get_password(settings, "api_key"),
             "cf_access_client_id": getattr(settings, "cf_access_client_id", None) or "",
-            "cf_access_client_secret": (
-                settings.get_password("cf_access_client_secret") if hasattr(settings, "get_password") else ""
-            ),
+            "cf_access_client_secret": _safe_get_password(settings, "cf_access_client_secret"),
             "allow_remote_business_context": cint(getattr(settings, "allow_remote_business_context", 0)),
             "embedding_model": getattr(settings, "embedding_model", None) or "nomic-embed-text",
             "enable_vector_search": cint(getattr(settings, "enable_vector_search", 1)),
